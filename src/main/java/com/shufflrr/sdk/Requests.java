@@ -24,7 +24,11 @@ public final class Requests {
     public static final Request FILE_DOWNLOAD = new Request(Request.Category.FILES, Request.Type.GET, "%s/download", "Accept", "application/json");
     public static final Request FILE_DELETE = new Request(Request.Category.FILES, Request.Type.DELETE, "%s", "Content-Type", "application/json");
 
+    public static final Request PORTAL = new Request(Request.Category.PORTAL, Request.Type.GET, "", "Accept", "application/json");
+
     public static final Request PRESENTATION_SLIDES = new Request(Request.Category.PRESENTATIONS, Request.Type.GET, "%s/slides", "Accept", "application/json");
+
+    public static final Request USER = new Request(Request.Category.USER, Request.Type.GET, "", "Accept", "application/json");
 
     private Requests() {}
 }

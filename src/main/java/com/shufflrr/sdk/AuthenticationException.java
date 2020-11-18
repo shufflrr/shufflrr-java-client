@@ -3,7 +3,7 @@ package com.shufflrr.sdk;
 /**
  * Unchecked exception for errors authenticating.
  */
-class AuthenticationException extends RuntimeException {
+public class AuthenticationException extends RuntimeException {
     private static final long serialVersionUID = -3265792946654947492L;
 
     public AuthenticationException() {}
