@@ -10,7 +10,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.release>14</maven.compiler.release>
+        <maven.compiler.release>15</maven.compiler.release>
         <jackson.version>2.11.3</jackson.version>
     </properties>
 

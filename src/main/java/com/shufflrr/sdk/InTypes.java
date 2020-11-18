@@ -14,4 +14,6 @@ public class InTypes {
             throw new IllegalArgumentException("File not found.", e);
         }
     });
+
+    private InTypes() {}
 }

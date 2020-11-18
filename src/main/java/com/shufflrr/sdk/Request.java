@@ -30,7 +30,7 @@ public class Request {
         return this;
     }
 
-    protected <T, R> HttpRequest build(HttpRequest.Builder builder, InType<T> in, URI base, String... variables) {
+    protected <T> HttpRequest build(HttpRequest.Builder builder, InType<T> in, URI base, String... variables) {
         switch (this.type) {
             case POST -> builder.POST(in.publisher());
             case PUT -> builder.PUT(in.publisher());
