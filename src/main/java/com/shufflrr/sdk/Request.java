@@ -6,9 +6,21 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public class Request {
+    private static final Function<URI, String[]> HEADERS = uri -> new String[]{
+            "Accept-Encoding", "gzip, deflate, br",
+            "Accept-Language", "en-US,en;q=0.9",
+            "Access-Control-Allow-Credentials", "true",
+            "Access-Control-Allow-Origin", uri.toString(),
+            "Content-Type", "application/json",
+            "Origin", uri.toString(),
+            "Accept", "application/json, text/javascript, /; q=0.01",
+            "Referer", uri.resolve("/Shufflrr").toString(),
+            "X-Requested-With", "XMLHttpRequest"
+    };
     private static final String ROOT = "api";
 
     protected final HttpRequest.Builder builder;
@@ -31,18 +43,20 @@ public class Request {
     }
 
     protected <T> HttpRequest build(HttpRequest.Builder builder, InType<T> in, URI base, String... variables) {
+        URI uri = uri(base, variables);
+
         switch (this.type) {
-            case POST -> builder.POST(in.publisher());
-            case PUT -> builder.PUT(in.publisher());
-            case DELETE -> builder.DELETE();
-            case GET -> builder.GET();
+            case POST -> builder.POST(in.publisher()).headers(HEADERS.apply(uri));
+            case PUT -> builder.PUT(in.publisher()).headers(HEADERS.apply(uri));
+            case DELETE -> builder.DELETE().headers(HEADERS.apply(uri));
+            case GET -> builder.GET().headers("Accept", "application/json");
         }
 
         if (this.headers.length != 0) {
             builder.headers(this.headers);
         }
 
-        return builder.uri(uri(base, variables)).build();
+        return builder.uri(uri).build();
     }
 
     private URI uri(URI base, String... variables) {
