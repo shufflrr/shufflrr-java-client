@@ -19,7 +19,7 @@ public class Request {
             "Origin", uri.toString(),
             "Accept", "application/json, text/javascript, /; q=0.01",
             "Referer", uri.resolve("/Shufflrr").toString(),
-            "X-Requested-With", "XMLHttpRequest"
+            "X-Requested-With", "XMLHttpRequest",
     };
     private static final String ROOT = "api";
 
@@ -49,11 +49,11 @@ public class Request {
             case POST -> builder.POST(in.publisher()).headers(HEADERS.apply(uri));
             case PUT -> builder.PUT(in.publisher()).headers(HEADERS.apply(uri));
             case DELETE -> builder.DELETE().headers(HEADERS.apply(uri));
-            case GET -> builder.GET().headers("Accept", "application/json");
+            case GET -> builder.GET().setHeader("Accept", "application/json");
         }
 
-        if (this.headers.length != 0) {
-            builder.headers(this.headers);
+        for (int i = 0; i < this.headers.length; i += 2) {
+            builder.setHeader(this.headers[i], this.headers[i + 1]);
         }
 
         return builder.uri(uri).build();

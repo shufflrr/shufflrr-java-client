@@ -21,14 +21,14 @@ public final class Requests {
     public static final Request FOLDER_UPDATE = new Request(Request.Category.FOLDERS, Request.Type.PUT, "");
     public static final Request FOLDER_MOVE = new Request(Request.Category.FOLDERS, Request.Type.POST, "%s/move");
     public static final Request FOLDER_DELETE = new Request(Request.Category.FOLDERS, Request.Type.DELETE, "%s", "Sec-Fetch-Site", "same-origin", "Sec-Fetch-Mode", "cors", "Sec-Fetch-Dest", "empty");
-    public static final Request FOLDER_UPLOAD = new Request(Request.Category.FOLDERS, Request.Type.POST, "%s/upload");
+    public static final Request FOLDER_UPLOAD = new Request(Request.Category.FOLDERS, Request.Type.POST, "%s/upload", "Content-Type", "multipart/form-data");
 
     public static final Request ACTIONS_QUEUE = new Request(Request.Category.ACTIONS_QUEUE, Request.Type.GET, "");
 
     public static final Request FILES = new Request(Request.Category.FILES, Request.Type.GET, "");
     public static final Request FILE = new Request(Request.Category.FILES, Request.Type.GET, "%s");
-    public static final Request FILE_UPDATE = new Request(Request.Category.FILES, Request.Type.PUT, "%s");
-    public static final Request FILE_MOVE = new Request(Request.Category.FILES, Request.Type.PUT, "move");
+    public static final Request FILE_UPDATE = new Request(Request.Category.FILES, Request.Type.PUT, "");
+    public static final Request FILE_MOVE = new Request(Request.Category.FILES, Request.Type.POST, "move");
     public static final Request FILE_DOWNLOAD = new Request(Request.Category.FILES, Request.Type.GET, "%s/download");
     public static final Request FILE_DELETE = new Request(Request.Category.FILES, Request.Type.DELETE, "%s");
 
