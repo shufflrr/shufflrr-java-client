@@ -59,7 +59,7 @@ public class Request {
         return builder.uri(uri).build();
     }
 
-    private URI uri(URI base, String... variables) {
+    protected URI uri(URI base, String... variables) {
         String path = String.format(String.join("/", ROOT, this.category.path, this.path), (Object[]) variables);
         return base.resolve(path);
     }

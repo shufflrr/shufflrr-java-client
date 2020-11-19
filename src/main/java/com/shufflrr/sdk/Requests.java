@@ -1,10 +1,18 @@
 package com.shufflrr.sdk;
 
+import java.net.URI;
+import java.net.http.HttpRequest;
+
 /**
  * Encapsulates abstractions for core request types.
  */
 public final class Requests {
-    static final Request LOGIN = new Request(Request.Category.ACCOUNT, Request.Type.POST, "login", "Content-Type", "application/json", "Accept", "application/json");
+    static final Request LOGIN = new Request(Request.Category.ACCOUNT, Request.Type.POST, "login", "Content-Type", "application/json", "Accept", "application/json") {
+        @Override
+        protected <T> HttpRequest build(HttpRequest.Builder builder, InType<T> in, URI base, String... variables) {
+            return builder.uri(super.uri(base, variables)).POST(in.publisher()).headers(super.headers).build();
+        }
+    };
 
     public static final Request FOLDERS = new Request(Request.Category.FOLDERS, Request.Type.GET, "");
     public static final Request ALL_FOLDERS = new Request(Request.Category.FOLDERS, Request.Type.GET, "all");
