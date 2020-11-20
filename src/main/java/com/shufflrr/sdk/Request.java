@@ -7,7 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 public class Request {
     private static final Function<URI, String[]> HEADERS = uri -> new String[]{
@@ -23,32 +23,30 @@ public class Request {
     };
     private static final String ROOT = "api";
 
-    protected final HttpRequest.Builder builder;
     protected final String[] headers;
     private final Category category;
     private final Type type;
     private final String path;
 
     Request(Category category, Type type, String path, String... headers) {
-        this.builder = HttpRequest.newBuilder();
         this.category = category;
         this.type = type;
         this.path = path;
         this.headers = headers;
     }
 
-    public Request apply(UnaryOperator<HttpRequest.Builder> op) {
-        op.apply(this.builder);
-        return this;
+    public Request withHeaders(String... headers) {
+        return new Request(this.category, this.type, this.path, Stream.of(headers, this.headers).flatMap(Stream::of).toArray(String[]::new));
     }
 
-    protected <T> HttpRequest build(HttpRequest.Builder builder, InType<T> in, URI base, String... variables) {
+    protected <T> HttpRequest.Builder configure(InType<T> in, URI base, String... variables) {
         URI uri = uri(base, variables);
+        HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
 
         switch (this.type) {
-            case POST -> builder.POST(in.publisher()).headers(HEADERS.apply(uri));
-            case PUT -> builder.PUT(in.publisher()).headers(HEADERS.apply(uri));
-            case DELETE -> builder.DELETE().headers(HEADERS.apply(uri));
+            case POST -> builder.POST(in.publisher()).headers(HEADERS.apply(base));
+            case PUT -> builder.PUT(in.publisher()).headers(HEADERS.apply(base));
+            case DELETE -> builder.DELETE().headers(HEADERS.apply(base));
             case GET -> builder.GET().setHeader("Accept", "application/json");
         }
 
@@ -56,7 +54,7 @@ public class Request {
             builder.setHeader(this.headers[i], this.headers[i + 1]);
         }
 
-        return builder.uri(uri).build();
+        return builder;
     }
 
     protected URI uri(URI base, String... variables) {
@@ -65,11 +63,11 @@ public class Request {
     }
 
     <T, R> HttpResponse<R> send(HttpClient client, URI base, InType<T> in, OutType<R> out, String... variables) throws IOException, InterruptedException {
-        return client.send(build(this.builder, in, base, variables), out.handler());
+        return client.send(configure(in, base, variables).build(), out.handler());
     }
 
     <T, R> CompletableFuture<HttpResponse<R>> sendAsync(HttpClient client, URI base, InType<T> in, OutType<R> out, String... variables) {
-        return client.sendAsync(build(this.builder, in, base, variables), out.handler());
+        return client.sendAsync(configure(in, base, variables).build(), out.handler());
     }
 
     public enum Category {

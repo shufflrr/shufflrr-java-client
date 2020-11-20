@@ -29,7 +29,7 @@ class AuthManager implements Shufflrr {
     }
 
     private boolean auth() {
-        return Requests.LOGIN.sendAsync(this.client, this.site, InTypes.STRING.withContent(credentials.asJson()), OutTypes.NODE)
+        return Requests.LOGIN.sendAsync(this.client, this.site, InTypes.STRING.with(credentials.asJson()), OutTypes.NODE)
                 .join().body().map(node -> node.get("success").asBoolean()).orElse(false);
     }
 

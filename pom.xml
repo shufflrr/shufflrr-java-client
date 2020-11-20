@@ -30,6 +30,11 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.mizosoft.methanol</groupId>
+            <artifactId>methanol</artifactId>
+            <version>1.4.1</version>
+        </dependency>
     </dependencies>
 
     <build>
